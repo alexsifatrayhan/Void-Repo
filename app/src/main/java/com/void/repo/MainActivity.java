@@ -6,10 +6,10 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.material.switchmaterial.SwitchMaterial;
 import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,12 +17,12 @@ public class MainActivity extends AppCompatActivity {
     private boolean isLocked = false;
     private boolean isPanicModeEnabled = false;
     private FileLocker fileLocker;
-    private String userPasskey = "1234"; // Default passkey
+    private String userPasskey = "1234";
 
     private TextView tvStatus;
-    private SwitchMaterial switchLock;
-    private SwitchMaterial switchPanic;
-    private SwitchMaterial switchStealth;
+    private Switch switchLock;
+    private Switch switchPanic;
+    private Switch switchStealth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         TextView tvCredential = findViewById(R.id.tv_credential);
         Button btnSelectFiles = findViewById(R.id.btn_select_files);
 
-        // Credential Click Listener
         tvCredential.setOnClickListener(v -> {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://alexsifatrayhan.github.io/about-me/"));
             startActivity(browserIntent);
@@ -75,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void toggleStealthMode(boolean enabled) {
         PackageManager pm = getPackageManager();
-        // Enable/Disable aliases
         int flagAlias = enabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
         int flagMain = enabled ? PackageManager.COMPONENT_ENABLED_STATE_DISABLED : PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
 

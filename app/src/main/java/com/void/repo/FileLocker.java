@@ -3,8 +3,8 @@ package com.void.repo;
 import android.content.Context;
 import org.json.JSONObject;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.nio.file.Files;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -33,16 +33,18 @@ public class FileLocker {
         saveMapping(mapping);
 
         // Move and rename
-        originalFile.renameTo(lockedFile);
+        if (!originalFile.renameTo(lockedFile)) {
+            throw new Exception("Failed to rename file");
+        }
     }
 
     public void unlockAll() throws Exception {
         JSONObject mapping = getMapping();
         File hiddenDir = new File(context.getFilesDir(), HIDDEN_DIR);
-        Iterator<String> keys = mapping.keys();
+        Iterator<?> keys = mapping.keys();
 
         while (keys.hasNext()) {
-            String lockedName = keys.next();
+            String lockedName = (String) keys.next();
             String originalPath = mapping.getString(lockedName);
             File lockedFile = new File(hiddenDir, lockedName);
             File originalFile = new File(originalPath);
@@ -60,7 +62,11 @@ public class FileLocker {
         File file = new File(context.getFilesDir(), MAPPING_FILE);
         if (!file.exists()) return new JSONObject();
 
-        byte[] encoded = Files.readAllBytes(file.toPath());
+        FileInputStream fis = new FileInputStream(file);
+        byte[] encoded = new byte[(int) file.length()];
+        fis.read(encoded);
+        fis.close();
+        
         String encryptedData = new String(encoded);
         String decryptedData = CryptoUtils.decrypt(encryptedData, password);
 
@@ -70,9 +76,11 @@ public class FileLocker {
 
     private void saveMapping(JSONObject mapping) throws Exception {
         String encryptedData = CryptoUtils.encrypt(mapping.toString(), password);
+        if (encryptedData == null) return;
+        
         File file = new File(context.getFilesDir(), MAPPING_FILE);
-        try (FileOutputStream fos = new FileOutputStream(file)) {
-            fos.write(encryptedData.getBytes());
-        }
+        FileOutputStream fos = new FileOutputStream(file);
+        fos.write(encryptedData.getBytes());
+        fos.close();
     }
 }
