@@ -1,0 +1,10 @@
+{
+  "name": "com.void.repo",
+  "description": "Void Repo - Professional file obfuscation and stealth security. Developed by SR7 Mods.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "File System Access"
+  ]
+}
