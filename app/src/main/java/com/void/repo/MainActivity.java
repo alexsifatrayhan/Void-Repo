@@ -1,5 +1,6 @@
 package com.void.repo;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,10 +10,9 @@ import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
 import java.io.File;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     private boolean isLocked = false;
     private boolean isPanicModeEnabled = false;
